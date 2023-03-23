@@ -1,5 +1,5 @@
 const clientId = '83f4cc2c01d64795a3a1d78467de18c9';
-const redirectUri = 'http://localhost:3001/'
+const redirectUri = 'http://localhost:3000/'
 
 let accessToken;
 
@@ -19,6 +19,7 @@ const Spotify = {
             // This clears the parameters, allowing us to grab a new access token when it expires.
             window.setTimeout(() => accessToken = '', expiresIn * 1000);
             window.history.pushState('Access Token', null, '/');
+            return accessToken;
 
         } else {
             const accessUrl = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectUri}`;
@@ -27,7 +28,7 @@ const Spotify = {
     },
 
     search(term) {
-        const accessToken = Spotify.getAccessToken;
+        const accessToken = Spotify.getAccessToken();
         return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, { 
             headers: {
             Authorization: `Bearer ${accessToken}`
@@ -41,7 +42,7 @@ const Spotify = {
             return jsonResponse.tracks.items.map(track => ({
                 id: track.id,
                 name: track.name,
-                artist: track.artist[0].name,
+                artists: track.artists[0].name,
                 album: track.album,
                 uri: track.uri
             }))
@@ -57,7 +58,7 @@ const Spotify = {
         let userId;
 
         return fetch('https://api.spotify.com/v1/me', { headers: headers }
-        ).then(response => response.json
+        ).then(response => response.json()
         ).then(jsonResponse => {
             userId = jsonResponse.id;
             return fetch(`https://api.spotify.com/v1/users/${userId}/playlists`,
@@ -75,7 +76,7 @@ const Spotify = {
                     body:JSON.stringify({ uris: trackUris })
                 })
             })
-        }) ;
+        });
     }
 }
 
