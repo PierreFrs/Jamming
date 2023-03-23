@@ -1,5 +1,5 @@
 const clientId = '83f4cc2c01d64795a3a1d78467de18c9';
-const redirectUri = 'http://localhost:3000/'
+const redirectUri = 'http://jammingAppPierre.surge.sh/';
 
 let accessToken;
 
